@@ -7,7 +7,7 @@ conf = SparkConf().setMaster("local").setAppName("WordCount")
 sc = SparkContext(conf = conf)
 
 # reading in text file and storing it 
-file = sc.textFile("D:/Teach/Spark/GITAAWorkshop/SherlockHolmes.txt")
+file = sc.textFile("D:/Spark/SherlockHolmes.txt")
 
 # splitting the text using lambda function
 words = file.flatMap(lambda line: line.split(" "))
@@ -24,4 +24,4 @@ cntWords = wordsCnt.map(lambda wc: (wc[1], wc[0]))
 # Sorting the key-value pairs by frequency of occurrence
 wordsCntSort = cntWords.sortByKey()
 
-wordsCntSort.saveAsTextFile("D:/Teach/Spark/GITAAWorkshop/code.wrkshp/wrdcnt")
+wordsCntSort.saveAsTextFile("D:/Spark/code.SH/wrdcnt")
