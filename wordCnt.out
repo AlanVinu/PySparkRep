@@ -1,0 +1,55 @@
+# File read into the system
+>>> file = sc.textFile("SherlockHolmes.txt")
+
+#The text is split and seperated
+>>> words = text_file.flatMap(lambda line: line.split(" "))
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'text_file' is not defined
+
+# The first five elements are viewed
+
+>>> words = file.flatMap(lambda line: line.split(" "))
+>>>
+>>> words.take(5)
+[Stage 0:>                                                          (0 + 1) / 1]
+                                                                                
+['Project', "Gutenberg's", 'The', 'Adventures', 'of']
+
+# The words are mapped to values
+
+>>> wordsOneCnt = words.map(lambda word: (word, 1))
+>>> wordsOneCnt.take(5)
+[Stage 1:>                                                          (0 + 1) / 1]
+                                                                                
+[('Project', 1), ("Gutenberg's", 1), ('The', 1), ('Adventures', 1), ('of', 1)]
+
+
+# The values are summed up according to the keys
+
+
+>>> wordsCnt = wordsOneCnt.reduceByKey(lambda a, b: a + b)
+>>>
+>>> wordsCnt.take(5)
+[Stage 3:>                                                          (0 + 2) / 2]
+[Stage 3:=============================>                             (1 + 1) / 2]
+[Stage 4:>                                                          (0 + 1) / 1]
+                                                                                
+[('', 3145), ('propriety', 2), ('1884--there', 1), ('"over', 1), ('probability.', 1)]
+>>> cntWords = wordsCnt.map(lambda wc: (wc[1], wc[0]))
+>>> cntWords.take(5)
+[Stage 6:>                                                          (0 + 1) / 1]
+                                                                                
+[(3145, ''), (2, 'propriety'), (1, '1884--there'), (1, '"over'), (1, 'probability.')]
+>>>
+
+
+# The elements are sorted by keys
+
+
+>>> wordsCntRevSort = cntWords.sortByKey()
+[Stage 8:>                                                          (0 + 2) / 2]
+[Stage 8:=============================>                             (1 + 1) / 2]                                                                                [Stage 10:>                                                         (0 + 2) / 2][Stage 10:=============================>                            (1 + 1) / 2]
+>>>
+>>> wordsCntRevSort.collect()
